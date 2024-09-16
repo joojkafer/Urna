@@ -23,26 +23,26 @@ public class Eleitor {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idEleitor;
 
-    @Column
-    @NotBlank
+    @Column(nullable = false)
+    @NotBlank(message = "Nome completo é obrigatório")
     @NotNull
     private String nomeCompleto;
-    
+
     @Column
     @CPF
     private String cpf;
 
-    @Column
+    @Column(nullable = false)
     @NotBlank
     @NotNull
     private String profissao;
 
-    @Column
+    @Column(nullable = false)
     @Pattern(regexp = "^\\(?(\\d{2})\\)?\\s?(9\\d{4})-?(\\d{4})$", message = "Telefone celular inválido, deve seguir o padrão (XX) XXXXX-XXXX")
     @NotBlank
     @NotNull
     private String telefoneCelular;
-    
+
     @Column
     @Pattern(regexp = "^\\(?(\\d{2})\\)?\\s?(\\d{4,5})-?(\\d{4})$", message = "Telefone fixo inválido, deve seguir o padrão (XX) XXXX-XXXX")
     private String telefoneFixo;
@@ -50,16 +50,13 @@ public class Eleitor {
     @Column
     @Email
     private String email;
-    
-    //STATUS ELEITOR:
-    /*1 - APTO
-     *2 - INATIVO
-     *3 - BLOQUEADO
-     *4 - PENDENTE
-     *5 - VOTOU.
-    */
-    
-    @Column
-    private Integer statusEleitor;
-    
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private StatusEleitor statusEleitor = StatusEleitor.PENDENTE;
+
+    public enum StatusEleitor {
+        APTO, INATIVO, BLOQUEADO, PENDENTE, VOTOU
+    }
 }
+

@@ -23,34 +23,35 @@ public class Candidato {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idCandidato;
 
-    @Column
+    @Column(nullable = false)
     @NotBlank
     @NotNull
     private String nomeCompleto;
 
-    @Column
+    @Column(nullable = false, unique = true)
     @CPF
     @NotNull
     private String cpf;
 
-    @Column
+    @Column(nullable = false, unique = true)
     @NotNull
     private Integer numeroCandidato;
 
-    @Column
+    @Column(nullable = false)
     @NotNull
     @Min(value = 1, message = "Função inválida, deve ser 1 para prefeito ou 2 para vereador")
     @Max(value = 2, message = "Função inválida, deve ser 1 para prefeito ou 2 para vereador")
     private Integer funcao;
-    
-    //STATUS CANDIDATO:
-    /*TRUE - APTO
-     *FALSE - INAPTO
-    */
-    @Column
-    private Boolean statusCandidato = true ;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private StatusCandidato statusCandidato = StatusCandidato.ATIVO;
 
     @Transient
     private Integer votosApurados;
 
+    public enum StatusCandidato {
+        ATIVO, INATIVO
+    }
 }
+

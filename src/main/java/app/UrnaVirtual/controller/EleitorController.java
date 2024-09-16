@@ -5,14 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import app.UrnaVirtual.entity.Eleitor;
 import app.UrnaVirtual.service.EleitorService;
@@ -20,7 +13,7 @@ import app.UrnaVirtual.service.EleitorService;
 @RestController
 @RequestMapping("/eleitor")
 public class EleitorController {
-	
+
     @Autowired
     private EleitorService eleitorService;
 
@@ -47,8 +40,12 @@ public class EleitorController {
     @GetMapping("/findById/{id}")
     public ResponseEntity<Eleitor> findById(@PathVariable long id) {
         try {
-        	Eleitor eleitor = this.eleitorService.findById(id);
-            return new ResponseEntity<>(eleitor, HttpStatus.OK);
+            Eleitor eleitor = this.eleitorService.findById(id);
+            if (eleitor != null) {
+                return new ResponseEntity<>(eleitor, HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+            }
         } catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         }
@@ -70,8 +67,7 @@ public class EleitorController {
             String mensagem = this.eleitorService.delete(id);
             return new ResponseEntity<>(mensagem, HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("Erro: " + e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
-    
 }

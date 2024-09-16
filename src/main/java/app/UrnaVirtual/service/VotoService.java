@@ -10,8 +10,9 @@ import org.springframework.transaction.annotation.Transactional;
 import app.UrnaVirtual.entity.Apuracao;
 import app.UrnaVirtual.entity.Candidato;
 import app.UrnaVirtual.entity.Voto;
-import app.UrnaVirtual.repository.VotoRepository;
 import app.UrnaVirtual.entity.Eleitor;
+import app.UrnaVirtual.entity.Eleitor.StatusEleitor;
+import app.UrnaVirtual.repository.VotoRepository;
 import app.UrnaVirtual.repository.CandidatoRepository;
 import app.UrnaVirtual.repository.EleitorRepository;
 
@@ -32,7 +33,7 @@ public class VotoService {
         Eleitor eleitor = eleitorRepository.findById(idEleitor)
                 .orElseThrow(() -> new IllegalArgumentException("Eleitor não encontrado"));
 
-        if (!eleitor.getStatusEleitor().equals(1)) {
+        if (!eleitor.getStatusEleitor().equals(StatusEleitor.APTO)) {
             throw new IllegalArgumentException("Eleitor inapto para votação");
         }
 
@@ -49,7 +50,7 @@ public class VotoService {
 
         votoRepository.save(voto);
 
-        eleitor.setStatusEleitor(1);
+        eleitor.setStatusEleitor(StatusEleitor.VOTOU);
         eleitorRepository.save(eleitor);
 
         return hash;
@@ -57,28 +58,27 @@ public class VotoService {
 
     @Transactional
     public Apuracao realizarApuracao() {
-        List<Candidato> candidatosPrefeito = candidatoRepository.findByFuncaoAndStatusCandidato(1, true);
-        List<Candidato> candidatosVereador = candidatoRepository.findByFuncaoAndStatusCandidato(2, true);
+        List<Candidato> candidatosPrefeito = candidatoRepository.findByFuncaoAndStatusCandidato(1, Candidato.StatusCandidato.ATIVO);
+        List<Candidato> candidatosVereador = candidatoRepository.findByFuncaoAndStatusCandidato(2, Candidato.StatusCandidato.ATIVO);
 
-        for (int i = 0; i < candidatosPrefeito.size(); i++) {
-            Candidato candidato = candidatosPrefeito.get(i);
-            int totalVotos = votoRepository.countVotosByCandidatoPrefeito(candidato.getIdCandidato());
-            candidato.setVotosApurados(totalVotos);
+        if (!candidatosPrefeito.isEmpty()) {
+            for (Candidato candidato : candidatosPrefeito) {
+                int votosPrefeito = votoRepository.countVotosByCandidatoPrefeito(candidato.getIdCandidato());
+                candidato.setVotosApurados(votosPrefeito);
+            }
         }
 
-        for (int i = 0; i < candidatosVereador.size(); i++) {
-            Candidato candidato = candidatosVereador.get(i);
-            int totalVotos = votoRepository.countVotosByCandidatoVereador(candidato.getIdCandidato());
-            candidato.setVotosApurados(totalVotos);
+        if (!candidatosVereador.isEmpty()) {
+            for (Candidato candidato : candidatosVereador) {
+                int votosVereador = votoRepository.countVotosByCandidatoVereador(candidato.getIdCandidato());
+                candidato.setVotosApurados(votosVereador);
+            }
         }
-
-        candidatosPrefeito.sort((c1, c2) -> Integer.compare(c2.getVotosApurados(), c1.getVotosApurados()));
-        candidatosVereador.sort((c1, c2) -> Integer.compare(c2.getVotosApurados(), c1.getVotosApurados()));
 
         Apuracao apuracao = new Apuracao();
-        apuracao.setTotalVotos(votoRepository.count());
         apuracao.setCandidatosPrefeito(candidatosPrefeito);
         apuracao.setCandidatosVereador(candidatosVereador);
+        apuracao.setTotalVotos(votoRepository.count());
 
         return apuracao;
     }

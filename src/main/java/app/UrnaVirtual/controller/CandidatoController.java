@@ -5,14 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import app.UrnaVirtual.entity.Candidato;
 import app.UrnaVirtual.service.CandidatoService;
@@ -20,7 +13,7 @@ import app.UrnaVirtual.service.CandidatoService;
 @RestController
 @RequestMapping("/candidato")
 public class CandidatoController {
-	
+    
     @Autowired
     private CandidatoService candidatoService;
 
@@ -47,27 +40,19 @@ public class CandidatoController {
     @GetMapping("/findById/{id}")
     public ResponseEntity<Candidato> findById(@PathVariable long id) {
         try {
-        	Candidato candidato = this.candidatoService.findById(id);
-            return new ResponseEntity<>(candidato, HttpStatus.OK);
+            Candidato candidato = this.candidatoService.findById(id);
+            if (candidato != null) {
+                return new ResponseEntity<>(candidato, HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+            }
         } catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         }
     }
-    
-    /*
-    @GetMapping("/findAll")
-    public ResponseEntity<List<Candidato>> findAll() {
-        try {
-            List<Candidato> lista = this.candidatoService.findAll();
-            return new ResponseEntity<>(lista, HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
-        }
-    }
-    */
-    
+
     @GetMapping("/findAllAtivo")
-    public ResponseEntity<List<Candidato>> findAll() {
+    public ResponseEntity<List<Candidato>> findAllAtivo() {
         try {
             List<Candidato> lista = this.candidatoService.findAll();
             return new ResponseEntity<>(lista, HttpStatus.OK);
@@ -75,14 +60,14 @@ public class CandidatoController {
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         }
     }
-    
+
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<String> delete(@PathVariable long id) {
         try {
             String mensagem = this.candidatoService.delete(id);
             return new ResponseEntity<>(mensagem, HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("Erro: " + e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 }

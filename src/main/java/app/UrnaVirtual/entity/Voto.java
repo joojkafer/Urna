@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Getter
 @Setter
@@ -23,14 +24,14 @@ public class Voto {
     private LocalDateTime dataHoraVotacao;
 
     @ManyToOne
-    @JoinColumn(name = "idCandidatoPrefeito")
+    @JoinColumn(name = "idCandidatoPrefeito", nullable = false)
     private Candidato candidatoPrefeito;
 
     @ManyToOne
-    @JoinColumn(name = "idCandidatoVereador")
+    @JoinColumn(name = "idCandidatoVereador", nullable = false)
     private Candidato candidatoVereador;
 
-    @Column
+    @Column(nullable = false, unique = true)
     private String comprovanteHash;
 
     @PrePersist
@@ -40,6 +41,7 @@ public class Voto {
     }
 
     private String gerarHash() {
-        return Integer.toHexString(hashCode()) + System.currentTimeMillis();
+        return UUID.randomUUID().toString();
     }
 }
+
