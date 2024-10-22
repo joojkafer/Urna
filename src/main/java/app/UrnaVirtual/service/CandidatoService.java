@@ -33,8 +33,8 @@ public class CandidatoService {
         return optional.orElse(null);
     }
 
-    public List<Candidato> findAll() {
-        return this.candidatoRepository.findByStatusCandidato(StatusCandidato.ATIVO);
+    public List<Candidato> findAllCandidatos() {
+        return this.candidatoRepository.findAll();
     }
 
     public String delete(long id) {

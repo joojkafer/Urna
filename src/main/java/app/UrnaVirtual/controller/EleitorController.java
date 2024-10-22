@@ -12,6 +12,7 @@ import app.UrnaVirtual.service.EleitorService;
 
 @RestController
 @RequestMapping("/eleitor")
+@CrossOrigin("*")
 public class EleitorController {
 
     @Autowired
@@ -51,6 +52,16 @@ public class EleitorController {
         }
     }
 
+    @GetMapping("/findAllAptos")
+    public ResponseEntity<List<Eleitor>> findAllAptos() {
+        try {
+            List<Eleitor> lista = this.eleitorService.findAllAptos();
+            return new ResponseEntity<>(lista, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+        }
+    }
+    
     @GetMapping("/findAll")
     public ResponseEntity<List<Eleitor>> findAll() {
         try {

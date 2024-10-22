@@ -45,8 +45,12 @@ public class EleitorService {
         return optional.orElse(null);
     }
 
-    public List<Eleitor> findAll() {
+    public List<Eleitor> findAllAptos() {
         return this.eleitorRepository.findByStatusEleitor(StatusEleitor.APTO);
+    }
+    
+    public List<Eleitor> findAll() {
+        return eleitorRepository.findAll();
     }
 
     public String delete(long id) {

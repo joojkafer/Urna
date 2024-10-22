@@ -12,6 +12,7 @@ import app.UrnaVirtual.service.CandidatoService;
 
 @RestController
 @RequestMapping("/candidato")
+@CrossOrigin("*")
 public class CandidatoController {
     
     @Autowired
@@ -54,7 +55,17 @@ public class CandidatoController {
     @GetMapping("/findAllAtivo")
     public ResponseEntity<List<Candidato>> findAllAtivo() {
         try {
-            List<Candidato> lista = this.candidatoService.findAll();
+            List<Candidato> lista = this.candidatoService.findAllCandidatos();
+            return new ResponseEntity<>(lista, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+        }
+    }
+    
+    @GetMapping("/findAll")
+    public ResponseEntity<List<Candidato>> findAll() {
+        try {
+            List<Candidato> lista = this.candidatoService.findAllCandidatos();
             return new ResponseEntity<>(lista, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
