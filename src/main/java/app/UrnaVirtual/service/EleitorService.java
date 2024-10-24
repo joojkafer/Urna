@@ -44,6 +44,10 @@ public class EleitorService {
         Optional<Eleitor> optional = this.eleitorRepository.findById(id);
         return optional.orElse(null);
     }
+    
+    public Eleitor findEleitorByCPF(String cpf) {
+        return eleitorRepository.findEleitorByCpf(cpf);
+    }
 
     public List<Eleitor> findAllAptos() {
         return this.eleitorRepository.findByStatusEleitor(StatusEleitor.APTO);

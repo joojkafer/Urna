@@ -51,6 +51,20 @@ public class EleitorController {
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         }
     }
+    
+    @GetMapping("/findEleitorByCPF/{cpf}")
+    public ResponseEntity<Eleitor> findEleitorByCPF(@PathVariable String cpf) {
+        try {
+            Eleitor eleitor = eleitorService.findEleitorByCPF(cpf);
+            if (eleitor != null) {
+                return new ResponseEntity<>(eleitor, HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+            }
+        } catch (Exception e) {
+            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+        }
+    }
 
     @GetMapping("/findAllAptos")
     public ResponseEntity<List<Eleitor>> findAllAptos() {

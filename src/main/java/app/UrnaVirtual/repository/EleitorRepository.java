@@ -14,4 +14,6 @@ public interface EleitorRepository extends JpaRepository<Eleitor, Long> {
     default List<Eleitor> findEleitoresInativos() {
         return findByStatusEleitor(StatusEleitor.INATIVO);
     }
+    
+    Eleitor findEleitorByCpf(String cpf);
 }
