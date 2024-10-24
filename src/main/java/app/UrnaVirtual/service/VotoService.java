@@ -37,19 +37,30 @@ public class VotoService {
             throw new IllegalArgumentException("Eleitor inapto para votação");
         }
 
-        if (voto.getCandidatoPrefeito().getFuncao() != 1) {
+        if (voto.getCandidatoPrefeitoNumero() == null || voto.getCandidatoVereadorNumero() == null) {
+            throw new IllegalArgumentException("Número do candidato a prefeito ou vereador não foi fornecido.");
+        }
+
+        Candidato candidatoPrefeito = candidatoRepository.findByNumeroCandidato(voto.getCandidatoPrefeitoNumero())
+                .orElseThrow(() -> new IllegalArgumentException("Candidato a prefeito não encontrado"));
+        Candidato candidatoVereador = candidatoRepository.findByNumeroCandidato(voto.getCandidatoVereadorNumero())
+                .orElseThrow(() -> new IllegalArgumentException("Candidato a vereador não encontrado"));
+
+        if (candidatoPrefeito.getFuncao() != 1) {
             throw new IllegalArgumentException("O candidato escolhido para prefeito é um candidato a vereador. Refaça a requisição!");
         }
 
-        if (voto.getCandidatoVereador().getFuncao() != 2) {
+        if (candidatoVereador.getFuncao() != 2) {
             throw new IllegalArgumentException("O candidato escolhido para vereador é um candidato a prefeito. Refaça a requisição!");
         }
+
+        voto.setCandidatoPrefeito(candidatoPrefeito);
+        voto.setCandidatoVereador(candidatoVereador);
 
         String hash = UUID.randomUUID().toString();
         voto.setComprovanteHash(hash);
 
         votoRepository.save(voto);
-
         eleitor.setStatusEleitor(StatusEleitor.VOTOU);
         eleitorRepository.save(eleitor);
 
@@ -61,19 +72,15 @@ public class VotoService {
         List<Candidato> candidatosPrefeito = candidatoRepository.findByFuncaoAndStatusCandidato(1, Candidato.StatusCandidato.ATIVO);
         List<Candidato> candidatosVereador = candidatoRepository.findByFuncaoAndStatusCandidato(2, Candidato.StatusCandidato.ATIVO);
 
-        if (!candidatosPrefeito.isEmpty()) {
-            for (Candidato candidato : candidatosPrefeito) {
-                int votosPrefeito = votoRepository.countVotosByCandidatoPrefeito(candidato.getIdCandidato());
-                candidato.setVotosApurados(votosPrefeito);
-            }
-        }
+        candidatosPrefeito.forEach(candidato -> {
+            int votosPrefeito = votoRepository.countVotosByCandidatoPrefeito(candidato.getIdCandidato());
+            candidato.setVotosApurados(votosPrefeito);
+        });
 
-        if (!candidatosVereador.isEmpty()) {
-            for (Candidato candidato : candidatosVereador) {
-                int votosVereador = votoRepository.countVotosByCandidatoVereador(candidato.getIdCandidato());
-                candidato.setVotosApurados(votosVereador);
-            }
-        }
+        candidatosVereador.forEach(candidato -> {
+            int votosVereador = votoRepository.countVotosByCandidatoVereador(candidato.getIdCandidato());
+            candidato.setVotosApurados(votosVereador);
+        });
 
         Apuracao apuracao = new Apuracao();
         apuracao.setCandidatosPrefeito(candidatosPrefeito);

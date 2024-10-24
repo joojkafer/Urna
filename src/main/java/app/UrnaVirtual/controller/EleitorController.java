@@ -8,7 +8,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import app.UrnaVirtual.entity.Eleitor;
+import app.UrnaVirtual.entity.Eleitor.StatusEleitor;
 import app.UrnaVirtual.service.EleitorService;
+import jakarta.validation.ConstraintViolationException;
 
 @RestController
 @RequestMapping("/eleitor")
