@@ -34,6 +34,12 @@ public class Voto {
     @Column(nullable = false, unique = true)
     private String comprovanteHash;
 
+    @Transient
+    private Integer candidatoPrefeitoNumero;
+
+    @Transient
+    private Integer candidatoVereadorNumero;
+
     @PrePersist
     public void prePersist() {
         this.dataHoraVotacao = LocalDateTime.now();
@@ -44,4 +50,3 @@ public class Voto {
         return UUID.randomUUID().toString();
     }
 }
-

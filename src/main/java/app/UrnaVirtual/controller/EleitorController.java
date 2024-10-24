@@ -8,7 +8,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import app.UrnaVirtual.entity.Eleitor;
+import app.UrnaVirtual.entity.Eleitor.StatusEleitor;
 import app.UrnaVirtual.service.EleitorService;
+import jakarta.validation.ConstraintViolationException;
 
 @RestController
 @RequestMapping("/eleitor")
@@ -49,6 +51,22 @@ public class EleitorController {
             }
         } catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+        }
+    }
+    
+    @GetMapping("/findByCpf/{cpf}")
+    public ResponseEntity<?> findByCpf(@PathVariable String cpf) {
+        try {
+            Eleitor eleitor = this.eleitorService.findByCpf(cpf);
+            if (eleitor != null && eleitor.getStatusEleitor() == StatusEleitor.APTO) {
+                return new ResponseEntity<>(eleitor, HttpStatus.OK);
+            } else if (eleitor != null) {
+                return new ResponseEntity<>("Eleitor encontrado, mas não está apto.", HttpStatus.FORBIDDEN);
+            } else {
+                return new ResponseEntity<>("Eleitor não encontrado.", HttpStatus.NOT_FOUND);
+            }
+        } catch (Exception e) {
+            return new ResponseEntity<>("Erro: " + e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 
