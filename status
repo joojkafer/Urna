@@ -1,0 +1,42 @@
+[33mcommit 47fadf1f517cd8fffe20a50f22d803acdba211ec[m[33m ([m[1;36mHEAD -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m
+Merge: 89e505e 315d92e
+Author: joojkafer <joaoantoniokaferribeiro@gmail.com>
+Date:   Thu Oct 24 18:28:48 2024 -0300
+
+    findByEleitoresByCPF
+
+[33mcommit 89e505edbc1e7c407a78e42c52d38b97981b2a03[m
+Author: joojkafer <joaoantoniokaferribeiro@gmail.com>
+Date:   Thu Oct 24 18:20:40 2024 -0300
+
+    add findEleitorByCPF
+
+[33mcommit 315d92e47423c04553f76000e430b41af3441717[m
+Author: Guilherme Vale <guigato62@gmail.com>
+Date:   Thu Oct 24 00:14:57 2024 -0300
+
+    Now voting
+
+[33mcommit b128e5be5ad98722d0e5afc090fe6ed9d2209042[m
+Author: Guilherme Vale <guigato62@gmail.com>
+Date:   Tue Oct 22 23:42:29 2024 -0300
+
+    Fixed eleitor and candidato returns error
+
+[33mcommit 6ccce77cd94057d50530a4525fd8e8a7536c9401[m
+Author: joojkafer <joaoantoniokaferribeiro@gmail.com>
+Date:   Mon Oct 21 21:52:07 2024 -0300
+
+    ajustes pro front
+
+[33mcommit 60421da61d8ff3382b457f20ffc275268328a72f[m
+Author: Guilherme Vale <guigato62@gmail.com>
+Date:   Mon Sep 16 02:02:50 2024 -0300
+
+    Created tests, changed services, entities and controllers
+
+[33mcommit 54053881c11eec1a9a9526bc6c525e52bfdf75a8[m
+Author: joojkafer <joaoantoniokaferribeiro@gmail.com>
+Date:   Sun Sep 15 19:35:51 2024 -0300
+
+    commit foda falta os testes e validar as regras de negocio
