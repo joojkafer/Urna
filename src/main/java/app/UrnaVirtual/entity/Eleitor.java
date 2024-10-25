@@ -29,7 +29,7 @@ public class Eleitor {
     private String nomeCompleto;
 
     @Column
-    @CPF
+    @Pattern(regexp = "^[0-9]{11}$", message = "CPF deve conter exatamente 11 dígitos numéricos")
     private String cpf;
 
     @Column(nullable = false)
