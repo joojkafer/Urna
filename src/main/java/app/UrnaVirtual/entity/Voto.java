@@ -16,37 +16,37 @@ import java.util.UUID;
 @Entity
 public class Voto {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long idVoto;
+ @Id
+ @GeneratedValue(strategy = GenerationType.IDENTITY)
+ private Long idVoto;
 
-    @Column(nullable = false)
-    private LocalDateTime dataHoraVotacao;
+ @Column(nullable = false)
+ private LocalDateTime dataHoraVotacao;
 
-    @ManyToOne
-    @JoinColumn(name = "idCandidatoPrefeito", nullable = false)
-    private Candidato candidatoPrefeito;
+ @ManyToOne
+ @JoinColumn(name = "idCandidatoPrefeito", nullable = true)
+ private Candidato candidatoPrefeito;
 
-    @ManyToOne
-    @JoinColumn(name = "idCandidatoVereador", nullable = false)
-    private Candidato candidatoVereador;
+ @ManyToOne
+ @JoinColumn(name = "idCandidatoVereador", nullable = true)
+ private Candidato candidatoVereador;
 
-    @Column(nullable = false, unique = true)
-    private String comprovanteHash;
+ @Column(nullable = false, unique = true)
+ private String comprovanteHash;
 
-    @Transient
-    private Integer candidatoPrefeitoNumero;
+ @Transient
+ private Integer candidatoPrefeitoNumero;
 
-    @Transient
-    private Integer candidatoVereadorNumero;
+ @Transient
+ private Integer candidatoVereadorNumero;
 
-    @PrePersist
-    public void prePersist() {
-        this.dataHoraVotacao = LocalDateTime.now();
-        this.comprovanteHash = gerarHash();
-    }
+ @PrePersist
+ public void prePersist() {
+     this.dataHoraVotacao = LocalDateTime.now();
+     this.comprovanteHash = gerarHash();
+ }
 
-    private String gerarHash() {
-        return UUID.randomUUID().toString();
-    }
+ private String gerarHash() {
+     return UUID.randomUUID().toString();
+ }
 }

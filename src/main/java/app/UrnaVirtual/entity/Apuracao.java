@@ -18,5 +18,7 @@ public class Apuracao {
     private List<Candidato> candidatosPrefeito;
     
     private List<Candidato> candidatosVereador;
+    
+    private int votosBrancos;
 
 }
