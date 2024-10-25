@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import app.UrnaVirtual.entity.Apuracao;
 import app.UrnaVirtual.entity.Candidato;
 import app.UrnaVirtual.entity.Voto;
+import app.UrnaVirtual.entity.Candidato.StatusCandidato;
 import app.UrnaVirtual.entity.Eleitor;
 import app.UrnaVirtual.entity.Eleitor.StatusEleitor;
 import app.UrnaVirtual.repository.VotoRepository;
@@ -69,16 +70,16 @@ public class VotoService {
 
     @Transactional
     public Apuracao realizarApuracao() {
-        List<Candidato> candidatosPrefeito = candidatoRepository.findByFuncaoAndStatusCandidato(1, Candidato.StatusCandidato.ATIVO);
-        List<Candidato> candidatosVereador = candidatoRepository.findByFuncaoAndStatusCandidato(2, Candidato.StatusCandidato.ATIVO);
+        List<Candidato> candidatosPrefeito = candidatoRepository.findByFuncaoAndStatusCandidato(1, StatusCandidato.ATIVO);
+        List<Candidato> candidatosVereador = candidatoRepository.findByFuncaoAndStatusCandidato(2, StatusCandidato.ATIVO);
 
         candidatosPrefeito.forEach(candidato -> {
-            int votosPrefeito = votoRepository.countVotosByCandidatoPrefeito(candidato.getIdCandidato());
+            int votosPrefeito = votoRepository.countVotosByCandidatoPrefeito_IdCandidato(candidato.getIdCandidato());
             candidato.setVotosApurados(votosPrefeito);
         });
 
         candidatosVereador.forEach(candidato -> {
-            int votosVereador = votoRepository.countVotosByCandidatoVereador(candidato.getIdCandidato());
+            int votosVereador = votoRepository.countVotosByCandidatoVereador_IdCandidato(candidato.getIdCandidato());
             candidato.setVotosApurados(votosVereador);
         });
 
